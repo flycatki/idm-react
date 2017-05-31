@@ -2,30 +2,61 @@
  * Created by jiangyh on 17-5-26.
  */
 import React from 'react';
-import { Layout, Icon } from 'antd';
+import { Layout, Icon, Input } from 'antd';
 import PropTypes from 'prop-types';
 import { routerRedux } from 'dva/router';
 import { connect } from 'dva';
 
-import styles from '../../components/Layout/MainLayout.less';
+import ContactHeader from './contactHeader';
 import ContactList from './contactList';
-const { Header } = Layout;
+import ContactDetail from './contactDetail';
 
 const Contact = ({ contact, app, loading, location, dispatch }) => {
   const { siderFold } = app;
-  const toggle = () => {
-    dispatch({ type: 'app/switchSider' });
+  const { list, detailContentVisible, detailDialogVisible } = contact;
+
+  const contactHeaderProps = {
+    siderFold,
+    toggle() {
+      dispatch({ type: 'app/switchSider' });
+    },
   };
+
+  const contactListProps = {
+    dataSource: list,
+    registerContact() {
+      dispatch({
+        type: 'contact/registerContact',
+        payload: {
+          modalType: 'create',
+        },
+      });
+    },
+  };
+
+  const contactDetailProps = {
+    detailContentVisible,
+    closeDetail() {
+      dispatch({ type: 'contact/closeDetail' });
+    },
+    switchDetailContent(state) {
+      dispatch({
+        type: 'contact/switchDetailContent',
+        payload: {
+          detailContentVisible: state,
+        },
+      });
+    },
+  };
+
   return (
     <div>
-      <Header className={styles.header}>
-        <Icon
-          className={styles.trigger}
-          onClick={toggle}
-          type={siderFold ? 'menu-unfold' : 'menu-fold'}
-        />
-      </Header>
-      <ContactList />
+      <ContactHeader {...contactHeaderProps} />
+      <ContactList {...contactListProps} />
+      { detailDialogVisible ?
+        <ContactDetail {...contactDetailProps} />
+        : null
+      }
     </div>
   );
 };
@@ -34,4 +65,4 @@ Contact.PropTypes = {
   contact: PropTypes.object,
 };
 
-export default connect(({ contact, app, loading, location, dispatch }) => ({ contact, app, loading, location, dispatch }))(Contact);
+export default connect(({ contact, app, loading, }) => ({ contact, app, loading }))(Contact);

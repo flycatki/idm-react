@@ -18,14 +18,14 @@ const MainLayout = ({ siderFold, children, location, dispatch, toggle, menu }) =
   };
 
   return (
-    <Layout>
+    <Layout className={styles.layout}>
       <Layout className={styles.siteHeader}>
         <div className={styles.logo}>
           <img alt={'logo'} src={config.logo} />
           {siderFold ? '' : <span>{config.name}</span>}
         </div>
       </Layout>
-      <Layout>
+      <Layout className={styles.mainContainer}>
         <Sider
           width={200}
           trigger={null}

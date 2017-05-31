@@ -17,7 +17,7 @@ module.exports = [
   {
     id: 3,
     name: '联系人',
-    icon: 'idcard',
+    icon: 'contacts',
     router: '/contact',
   },
   {
