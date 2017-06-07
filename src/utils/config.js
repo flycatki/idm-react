@@ -10,5 +10,6 @@ module.exports = {
     dashboard: '/dashboard',
     contacts: '/contacts',
     contactCreate: '/contact/create',
+    contactUpdate: '/contact/update/:id',
   },
 };

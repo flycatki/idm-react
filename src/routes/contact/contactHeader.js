@@ -9,7 +9,11 @@ import styles from './contactHeader.less';
 const { Header } = Layout;
 const Search = Input.Search;
 
-const ContactHeader = ({ siderFold, toggle }) => {
+const ContactHeader = ({ siderFold, toggle, registerContact }) => {
+  const handleRegisterContact = () => {
+    registerContact();
+  };
+
   return (
     <Header className={styles.header}>
       <Row type="flex" align="middle">
@@ -22,6 +26,9 @@ const ContactHeader = ({ siderFold, toggle }) => {
         </Col>
         <Col span={3}>
           <Search placeholder="名称" addonAfter={<Icon type="down" />} />
+        </Col>
+        <Col span={2} offset={18}>
+          <Button type="primary" onClick={handleRegisterContact}><Icon type="plus" /> 新建联系人</Button>
         </Col>
       </Row>
     </Header>

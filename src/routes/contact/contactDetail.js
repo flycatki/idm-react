@@ -14,12 +14,14 @@ const Option = Select.Option;
 
 const ContactDetail = ({
   item = {},
+  onOk,
   closeDetail,
   detailContentVisible,
   switchDetailContent,
   form: {
     getFieldDecorator,
     getFieldValue,
+    getFieldsValue,
   },
 }) => {
   const handleClose = () => {
@@ -28,11 +30,33 @@ const ContactDetail = ({
 
   const handleOk = () => {
     const name = getFieldValue('name');
+    if (name === '') {
+      return;
+    }
     if (name) {
       switchDetailContent(true);
     } else {
       switchDetailContent(false);
     }
+
+    const data = {
+      ...getFieldsValue(),
+      key: item.key,
+    };
+    if (!item.id) {
+      data.account = 'test1';
+    }
+
+    onOk(data);
+  };
+
+  const handlePressEnter = (e) => {
+    const data = {
+      ...getFieldsValue(),
+      key: item.key,
+    };
+
+    onOk(data);
   };
 
   const formItemLayout = {
@@ -68,7 +92,7 @@ const ContactDetail = ({
               {getFieldDecorator('title', {
                 initialValue: item.title,
               })(
-                <Input size="default" className={styles.formInputStyle} />,
+                <Input size="default" className={styles.formInputStyle} onPressEnter={handlePressEnter} />,
               )}
             </FormItem>
             <FormItem {...formItemLayout} className={styles.formItemStyle} label="账号">

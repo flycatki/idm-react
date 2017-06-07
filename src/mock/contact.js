@@ -13,13 +13,18 @@ const contactsListData = Mock.mock({
       title: Mock.Random.csentence(3),
       account: Mock.Random.string('lower', 5),
       email: Mock.mock('@EMAIL()'),
-      'moblie|1': ['13531544954', '13632250649', '15820292420', '15999905612'],
+      'mobile|1': ['13531544954', '13632250649', '15820292420', '15999905612'],
       'officePhone|1': ['83678578', '12348129', '098712872', '84736512'],
     },
   ],
 });
 
-let database;
+let database = [];
+
+const NOTFOUND = {
+  message: 'Not Found',
+  documentation_url: 'http://localhost:8000/request',
+};
 
 module.exports = {
   'GET /contacts': (req, res) => {
@@ -49,6 +54,27 @@ module.exports = {
 
     database.unshift(newData);
 
-    res.status(200).end();
+    res.status(200).json({
+      data: newData,
+    });
+  },
+  'PATCH /contact/update/:id': (req, res) => {
+    const { id } = req.params;
+    const editItem = req.body;
+    let isExist = false;
+
+    database = database.map((item) => {
+      if (item.id === id) {
+        isExist = true;
+        return Object.assign({}, item, editItem);
+      }
+      return item;
+    });
+
+    if (isExist) {
+      res.status(201).end();
+    } else {
+      res.status(404).json(NOTFOUND);
+    }
   },
 };

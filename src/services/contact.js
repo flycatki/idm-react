@@ -4,12 +4,20 @@
 import { request, config } from '../utils';
 
 const { api } = config;
-const { contactCreate } = api;
+const { contactCreate, contactUpdate } = api;
 
 export async function create(params) {
   return request({
     url: contactCreate,
     data: params,
-    method: 'POST',
+    method: 'post',
+  });
+}
+
+export async function update(params) {
+  return request({
+    url: contactUpdate,
+    method: 'patch',
+    data: params,
   });
 }

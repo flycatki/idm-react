@@ -13,40 +13,64 @@ import ContactDetail from './contactDetail';
 
 const Contact = ({ contact, app, loading, location, dispatch }) => {
   const { siderFold } = app;
-  const { list, detailContentVisible, detailDialogVisible } = contact;
+  const {
+    list, currentItem, detailContentVisible,
+    detailDialogVisible, modalType, pagination,
+  } = contact;
+  const registerContact = () => {
+    dispatch({
+      type: 'contact/registerContact',
+      payload: {
+        modalType: 'create',
+      },
+    });
+  };
+
+  const switchDetailContent = (state) => {
+    dispatch({
+      type: 'contact/switchDetailContent',
+      payload: {
+        detailContentVisible: state,
+      },
+    });
+  };
 
   const contactHeaderProps = {
     siderFold,
     toggle() {
       dispatch({ type: 'app/switchSider' });
     },
+    registerContact,
   };
 
   const contactListProps = {
     dataSource: list,
-    registerContact() {
+    registerContact,
+    pagination,
+    onEditItem(item) {
       dispatch({
-        type: 'contact/registerContact',
+        type: 'contact/showDetail',
         payload: {
-          modalType: 'create',
+          currentItem: item,
+          modalType: 'update',
         },
       });
     },
   };
 
   const contactDetailProps = {
+    item: modalType === 'create' ? {} : currentItem,
     detailContentVisible,
+    onOk(data) {
+      dispatch({
+        type: `contact/${modalType}`,
+        payload: data,
+      });
+    },
     closeDetail() {
       dispatch({ type: 'contact/closeDetail' });
     },
-    switchDetailContent(state) {
-      dispatch({
-        type: 'contact/switchDetailContent',
-        payload: {
-          detailContentVisible: state,
-        },
-      });
-    },
+    switchDetailContent,
   };
 
   return (
@@ -65,4 +89,4 @@ Contact.PropTypes = {
   contact: PropTypes.object,
 };
 
-export default connect(({ contact, app, loading, }) => ({ contact, app, loading }))(Contact);
+export default connect(({ contact, app, loading }) => ({ contact, app, loading }))(Contact);

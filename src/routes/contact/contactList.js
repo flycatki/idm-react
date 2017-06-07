@@ -3,11 +3,11 @@
  */
 import React from 'react';
 import { Table, Icon, Button } from 'antd';
+import { Link } from 'dva/router';
 
 import styles from './contactList.less';
 
-const ContactList = ({ dataSource, registerContact }) => {
-
+const ContactList = ({ registerContact, onEditItem, ...tableProps }) => {
   const handleRegisterContact = () => {
     registerContact();
   };
@@ -26,10 +26,63 @@ const ContactList = ({ dataSource, registerContact }) => {
     );
   };
 
+  const handleNameColClick = (record, e) => {
+    onEditItem(record);
+  };
+
+  const columns = [
+    {
+      title: '序号',
+      dataIndex: 'index',
+      key: 'index',
+      width: 50,
+      render: (text, record, index) => <span>{index + 1}</span>,
+    },
+    {
+      title: '名称',
+      dataIndex: 'name',
+      key: 'name',
+      render: (text, record) => <a onClick={e => handleNameColClick(record, e)}>{text}</a>,
+    },
+    {
+      title: '头衔',
+      dataIndex: 'title',
+      key: 'title',
+    },
+    {
+      title: '账号',
+      dataIndex: 'account',
+      key: 'account',
+    },
+    {
+      title: '邮箱',
+      dataIndex: 'email',
+      key: 'email',
+    },
+    {
+      title: '移动电话',
+      dataIndex: 'mobile',
+      key: 'mobile',
+    },
+    {
+      title: '办公电话',
+      dataIndex: 'officePhone',
+      key: 'officePhone',
+    },
+  ];
+
   return (
     <div className={styles.listWrapper}>
-      {dataSource ?
-        <Table />
+      {tableProps.dataSource.length > 0 ?
+        <div className={styles.contactTableWrapper}>
+          <Table
+            {...tableProps}
+            className={styles.contactTable}
+            simple
+            rowKey={record => record.key}
+            columns={columns}
+          />
+        </div>
         : getEmptyPrompt()
       }
     </div>

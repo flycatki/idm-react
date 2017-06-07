@@ -1,4 +1,5 @@
 import axios from 'axios';
+import pathToRegexp from 'path-to-regexp';
 
 const fetch = (options) => {
   let {
@@ -8,11 +9,23 @@ const fetch = (options) => {
     url,
   } = options;
 
+  const match = pathToRegexp.parse(url);
+  url = pathToRegexp.compile(url)(data);
+  for (let item of match) {
+    if (item instanceof Object && item.name in data) {
+      delete data[item.name];
+    }
+  }
+
   switch (method.toLowerCase()) {
     case 'get':
       return axios.get(url, {
         params: data,
       });
+    case 'post':
+      return axios.post(url, data);
+    case 'patch':
+      return axios.patch(url, data);
     default:
       return axios(options);
   }
@@ -45,6 +58,7 @@ export default function request(options) {
     //.then(parseJSON)
     .then((data) => {
       return {
+        success: true,
         ...data.data,
       };
     })
