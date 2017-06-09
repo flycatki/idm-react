@@ -10,6 +10,7 @@ export default {
   state: {
     list: [],
     currentItem: {},
+    advanceSearchVisible: false,
     detailContentVisible: false,
     detailDialogVisible: false,
     modalType: 'create',
@@ -23,7 +24,7 @@ export default {
   },
   effects: {
     *query({ payload }, { call, put }) {
-      payload = parse(location.search.substr(1));
+      //payload = parse(location.search.substr(1));
       const data = yield call(query, payload);
       if (data) {
         yield put({
@@ -109,6 +110,12 @@ export default {
       return {
         ...state,
         ...action.payload,
+      };
+    },
+    switchAdvanceSearch(state) {
+      return {
+        ...state,
+        advanceSearchVisible: !state.advanceSearchVisible,
       };
     },
   },

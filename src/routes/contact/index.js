@@ -16,7 +16,9 @@ const Contact = ({ contact, app, loading, location, dispatch }) => {
   const {
     list, currentItem, detailContentVisible,
     detailDialogVisible, modalType, pagination,
+    advanceSearchVisible,
   } = contact;
+  const { pageSize } = pagination;
   const registerContact = () => {
     dispatch({
       type: 'contact/registerContact',
@@ -37,16 +39,37 @@ const Contact = ({ contact, app, loading, location, dispatch }) => {
 
   const contactHeaderProps = {
     siderFold,
+    advanceSearchVisible,
     toggle() {
       dispatch({ type: 'app/switchSider' });
     },
+    switchAdvance() {
+      dispatch({ type: 'contact/switchAdvanceSearch' });
+    },
     registerContact,
+    onFilterChange(value) {
+      dispatch({
+        type: 'contact/query',
+        payload: value,
+      });
+    },
   };
 
   const contactListProps = {
     dataSource: list,
     registerContact,
+    loading: loading.effects['contact/query'],
     pagination,
+    location,
+    onChange(page) {
+      dispatch({
+        type: 'contact/query',
+        payload: {
+          page: page.current,
+          pageSize: page.pageSize,
+        },
+      });
+    },
     onEditItem(item) {
       dispatch({
         type: 'contact/showDetail',

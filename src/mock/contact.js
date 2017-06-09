@@ -10,7 +10,8 @@ const contactsListData = Mock.mock({
   'data|30-50': [
     {
       id: '@id',
-      title: Mock.Random.csentence(3),
+      name: '@name',
+      title: Mock.Random.cword(3),
       account: Mock.Random.string('lower', 5),
       email: Mock.mock('@EMAIL()'),
       'mobile|1': ['13531544954', '13632250649', '15820292420', '15999905612'],
@@ -19,7 +20,7 @@ const contactsListData = Mock.mock({
   ],
 });
 
-let database = [];
+let database;
 
 const NOTFOUND = {
   message: 'Not Found',
@@ -52,6 +53,7 @@ module.exports = {
     const newData = req.body;
     newData.id = Mock.mock('@id');
 
+    database = database || [];
     database.unshift(newData);
 
     res.status(200).json({

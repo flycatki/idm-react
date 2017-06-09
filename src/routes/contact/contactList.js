@@ -2,8 +2,8 @@
  * Created by jiangyh on 17-5-26.
  */
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Table, Icon, Button } from 'antd';
-import { Link } from 'dva/router';
 
 import styles from './contactList.less';
 
@@ -35,7 +35,7 @@ const ContactList = ({ registerContact, onEditItem, ...tableProps }) => {
       title: '序号',
       dataIndex: 'index',
       key: 'index',
-      width: 50,
+      width: 60,
       render: (text, record, index) => <span>{index + 1}</span>,
     },
     {
@@ -79,6 +79,7 @@ const ContactList = ({ registerContact, onEditItem, ...tableProps }) => {
             {...tableProps}
             className={styles.contactTable}
             simple
+            bordered
             rowKey={record => record.key}
             columns={columns}
           />
@@ -87,6 +88,11 @@ const ContactList = ({ registerContact, onEditItem, ...tableProps }) => {
       }
     </div>
   );
+};
+
+ContactList.propTypes = {
+  registerContact: PropTypes.func,
+  onEditItem: PropTypes.func,
 };
 
 export default ContactList;
