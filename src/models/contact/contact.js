@@ -24,7 +24,7 @@ export default {
   },
   effects: {
     *query({ payload }, { call, put }) {
-      //payload = parse(location.search.substr(1));
+      payload = payload || parse(location.search.substr(1));
       const data = yield call(query, payload);
       if (data) {
         yield put({

@@ -75,6 +75,7 @@ const Contact = ({ contact, app, loading, location, dispatch }) => {
         type: 'contact/showDetail',
         payload: {
           currentItem: item,
+          detailContentVisible: true,
           modalType: 'update',
         },
       });

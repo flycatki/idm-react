@@ -43,6 +43,13 @@ const ContactList = ({ registerContact, onEditItem, ...tableProps }) => {
       dataIndex: 'name',
       key: 'name',
       render: (text, record) => <a onClick={e => handleNameColClick(record, e)}>{text}</a>,
+      sorter: (a, b) => {
+        const s = a.name.toLowerCase();
+        const t = b.name.toLowerCase();
+        if (s < t) return -1;
+        if (s > t) return 1;
+        return 0;
+      },
     },
     {
       title: '头衔',

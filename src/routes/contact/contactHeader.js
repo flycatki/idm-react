@@ -57,7 +57,7 @@ const ContactHeader = ({
             addonAfter={<Icon onClick={handleSwitchAdvance} type={advanceSearchVisible ? 'up' : 'down'} className={styles.searchIcon} />}
           />
         </Col>
-        <Col span={3} offset={17}>
+        <Col span={3} offset={17} style={{ textAlign: 'right' }}>
           <Button type="primary" onClick={handleRegisterContact}><Icon type="plus" /> 新建联系人</Button>
           <Tooltip placement="left" title="点击跳转帮助页面" >
             <Button type="primary" shape="circle" icon="question" size="small" style={{ marginLeft: 10 }} />
