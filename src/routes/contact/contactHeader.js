@@ -22,7 +22,9 @@ const ContactHeader = ({
     getFieldsValue,
   },
 }) => {
-  const handleRegisterContact = () => {
+  const handleRegisterContact = (e) => {
+    e.stopPropagation();
+    e.nativeEvent.stopImmediatePropagation();
     registerContact();
   };
 

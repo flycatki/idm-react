@@ -8,7 +8,9 @@ import { Table, Icon, Button } from 'antd';
 import styles from './contactList.less';
 
 const ContactList = ({ registerContact, onEditItem, ...tableProps }) => {
-  const handleRegisterContact = () => {
+  const handleRegisterContact = (e) => {
+    e.stopPropagation();
+    e.nativeEvent.stopImmediatePropagation();
     registerContact();
   };
 
@@ -27,6 +29,8 @@ const ContactList = ({ registerContact, onEditItem, ...tableProps }) => {
   };
 
   const handleNameColClick = (record, e) => {
+    e.stopPropagation();
+    e.nativeEvent.stopImmediatePropagation();
     onEditItem(record);
   };
 

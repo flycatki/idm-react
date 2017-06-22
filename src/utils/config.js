@@ -8,8 +8,8 @@ module.exports = {
     users: '/users',
     user: '/user/:id',
     dashboard: '/dashboard',
-    contacts: '/contacts',
-    contactCreate: '/contact/create',
+    contacts: '/contact',
+    contactCreate: '/contact',
     contactUpdate: '/contact/update/:id',
   },
 };

@@ -24,6 +24,8 @@ const fetch = (options) => {
       });
     case 'post':
       return axios.post(url, data);
+    case 'put':
+      return axios.put(url, data);
     case 'patch':
       return axios.patch(url, data);
     default:
@@ -57,6 +59,9 @@ export default function request(options) {
     //.then(checkStatus)
     //.then(parseJSON)
     .then((data) => {
+      if (options.cb) {
+        options.cb();
+      }
       return {
         success: true,
         ...data.data,

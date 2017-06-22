@@ -21,5 +21,12 @@
     "font-size-base": "12px",
     "text-color": "#333",
     "border-radius-base": "3px"
+  },
+  "proxy": {
+    "/api/v1": {
+      "target": "http://127.0.0.1:8360",
+      "secure": "false",
+      "pathRewrite": { "^/api/v1" : "" }
+    }
   }
 }

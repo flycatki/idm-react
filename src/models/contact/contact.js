@@ -21,6 +21,10 @@ export default {
       current: 1,
       total: null,
     },
+    dialogReverse: false,
+    dialogReverseDelay: 0,
+    dialogPaused: true,
+    dialogMoment: null,
   },
   effects: {
     *query({ payload }, { call, put }) {
@@ -41,12 +45,14 @@ export default {
       }
     },
     *create({ payload }, { call, put }) {
-      const data = yield call(create, payload);
+      const cb = payload.cb || {};
+      const data = yield call(create, { data: { ...payload.data }, cb: cb });
       if (data.success) {
+        const id = data.data.id || '';
         yield put({
           type: 'updateCurrentContact',
           payload: {
-            currentItem: data.data,
+            currentItem: { ...payload.data, id },
             modalType: 'update',
           },
         });
@@ -57,7 +63,8 @@ export default {
     },
     *update({ payload }, { select, call, put }) {
       const id = yield select(({ contact }) => contact.currentItem.id);
-      const newContact = { ...payload, id };
+      const cb = payload.cb || {};
+      const newContact = { data: { ...payload.data, id }, cb: cb };
       const data = yield call(update, newContact);
       if (data.success) {
         yield put({ type: 'query' });
@@ -84,7 +91,22 @@ export default {
         ...action.payload,
         detailContentVisible: false,
         detailDialogVisible: true,
+        dialogReverse: false,
+        dialogReverseDelay: 0,
+        dialogPaused: false,
+        dialogMoment: null,
         currentItem: {},
+      };
+    },
+    closeContactView(state, action) {
+      return {
+        ...state,
+        ...action.payload,
+        detailDialogVisible: false,
+        dialogReverse: true,
+        dialogReverseDelay: 0,
+        dialogPaused: false,
+        dialogMoment: null,
       };
     },
     updateCurrentContact(state, action) {
@@ -94,11 +116,27 @@ export default {
       };
     },
     showDetail(state, action) {
-      return {
-        ...state,
-        ...action.payload,
-        detailDialogVisible: true,
-      };
+      if (state.detailDialogVisible === true) {
+        return {
+          ...state,
+          ...action.payload,
+          detailDialogVisible: false,
+          dialogReverse: true,
+          dialogReverseDelay: 0,
+          dialogPaused: false,
+          dialogMoment: null,
+        };
+      } else {
+        return {
+          ...state,
+          ...action.payload,
+          detailDialogVisible: true,
+          dialogReverse: false,
+          dialogReverseDelay: 0,
+          dialogPaused: false,
+          dialogMoment: null,
+        };
+      }
     },
     closeDetail(state) {
       return {

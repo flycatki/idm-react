@@ -4,6 +4,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Icon, Form, Input, Row, Col, Button, Select } from 'antd';
+import ContactView from '../../components/Contact/ContactView';
 import DetailDialog from '../../components/DetailDialog/DetailDialog';
 
 import styles from './contactDetail.less';
@@ -15,6 +16,12 @@ const Option = Select.Option;
 const ContactDetail = ({
   item = {},
   onOk,
+  dialogReverse,
+  dialogReverseDelay,
+  dialogPaused,
+  dialogMoment,
+  detailDialogVisible,
+  closeContactView,
   closeDetail,
   detailContentVisible,
   switchDetailContent,
@@ -64,10 +71,18 @@ const ContactDetail = ({
     wrapperCol: { span: 14 },
   };
 
+  const viewProps = {
+    dialogReverse,
+    dialogReverseDelay,
+    dialogPaused,
+    dialogMoment,
+    detailDialogVisible,
+    closeContactView,
+  };
+
   return (
-    <DetailDialog
-      visible="true"
-      onClose={handleClose}
+    <ContactView
+      {...viewProps}
     >
       <Form>
         <div className={styles.detailHeader}>
@@ -135,7 +150,7 @@ const ContactDetail = ({
           : null
         }
       </Form>
-    </DetailDialog>
+    </ContactView>
   );
 };
 

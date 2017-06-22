@@ -2,7 +2,7 @@
  * Created by jiangyh on 17-5-26.
  */
 import React from 'react';
-import { Layout, Icon, Input } from 'antd';
+import { Layout, Icon, Input, message } from 'antd';
 import PropTypes from 'prop-types';
 import { routerRedux } from 'dva/router';
 import { connect } from 'dva';
@@ -17,6 +17,10 @@ const Contact = ({ contact, app, loading, location, dispatch }) => {
     list, currentItem, detailContentVisible,
     detailDialogVisible, modalType, pagination,
     advanceSearchVisible,
+    dialogReverse,
+    dialogReverseDelay,
+    dialogPaused,
+    dialogMoment,
   } = contact;
   const { pageSize } = pagination;
   const registerContact = () => {
@@ -88,23 +92,42 @@ const Contact = ({ contact, app, loading, location, dispatch }) => {
     onOk(data) {
       dispatch({
         type: `contact/${modalType}`,
-        payload: data,
+        payload: {
+          data: data,
+          cb: updateSuccess,
+        },
       });
+    },
+    onPlay(contactView) {
+      contactView.onPlay();
     },
     closeDetail() {
       dispatch({ type: 'contact/closeDetail' });
     },
     switchDetailContent,
+    closeContactView() {
+      dispatch({ type: 'contact/closeContactView' });
+    },
+    dialogReverse,
+    dialogReverseDelay,
+    dialogPaused,
+    dialogMoment,
+    detailDialogVisible,
+  };
+
+  const updateSuccess = () => {
+    if (modalType === 'create') {
+      message.success('新建成功');
+    } else {
+      message.success('更新成功');
+    }
   };
 
   return (
     <div>
       <ContactHeader {...contactHeaderProps} />
       <ContactList {...contactListProps} />
-      { detailDialogVisible ?
-        <ContactDetail {...contactDetailProps} />
-        : null
-      }
+      <ContactDetail {...contactDetailProps} />
     </div>
   );
 };
